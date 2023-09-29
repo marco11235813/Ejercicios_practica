@@ -1149,19 +1149,88 @@ def datos_personales()->str:
 # Naranja	0.70
 
 
-def ():
+def verduleria()->str:
+
+    verduras= {'Platano': 1.35,
+               'Manzana': 0.80,
+               'Pera': 0.85,
+               'Naranja': 0.70}
+    
+    while True:
+        pedido= input('Que va a comprar hoy?: ').title()
+        peso= float(input('Cuanto va a llevar? (en kgs): '))
+
+        if pedido in verduras.keys():
+            print(f'El costo total de {pedido} es de ${verduras[pedido]*peso}')
+            break
+        else:
+            print('No tenemos en stock el producto ingresado')
+            promp= input('Desea realizar otro pedido? SI/NO: ')
+            if promp == 'si':
+                continue
+            elif promp == 'no':
+                break
+            
     return
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 4
 # Escribir un programa que pregunte una fecha en formato dd/mm/aaaa y muestre por pantalla la misma fecha en formato dd de <mes> de aaaa donde <mes> es el nombre del mes.
 
+def fecha()-> str:
+
+    fecha= input('Ingresa la fecha separada por /: ').split('/')
+    dicc= {'dia': fecha[0],
+           'mes': fecha[1],
+           'año': fecha[2]}
+    
+    print(f'{int(dicc["dia"]):02} de mes {int(dicc["mes"]):02} de {int(dicc["año"]):4}')
+
+    return
+
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 5
 # Escribir un programa que almacene el diccionario con los créditos de las asignaturas de un curso {'Matemáticas': 6, 'Física': 4, 'Química': 5} y después muestre por pantalla los créditos de cada asignatura en el formato <asignatura> tiene <créditos> créditos, donde <asignatura> es cada una de las asignaturas del curso, y <créditos> son sus créditos. Al final debe mostrar también el número total de créditos del curso.
 
+def calificaciones2()->str:
+
+    materias= ['Matematicas', 'Fisica','Quimica']
+    print('Ingrese las calificaciones por materia:\n')
+    total= 0
+    for materia in materias:
+        calificacion= int(input(f'{materia}: '))
+        total += calificacion
+        print(f'{materia}: {calificacion}')
+
+    print(f'\nTotal de puntos: {total}')
+
+    return
+
+
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 6
 # Escribir un programa que cree un diccionario vacío y lo vaya llenado con información sobre una persona (por ejemplo nombre, edad, sexo, teléfono, correo electrónico, etc.) que se le pida al usuario. Cada vez que se añada un nuevo dato debe imprimirse el contenido del diccionario.
+
+def registro()->str:
+
+    persona= {}
+    condicion= True
+
+    while condicion:
+        ingreso= input('Ingresa los datos: ')
+
+        if ':' in ingreso:
+            ingreso= ingreso.split(':')
+            persona.setdefault(ingreso[0],ingreso[1])
+            print(persona)
+        elif ingreso.lower() == 'exit':
+            break
+        else:
+            print('Valor o sintaxis de carga invalida')
+            continue
+
+    return
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 7
@@ -1173,13 +1242,116 @@ def ():
 # Artículo 3	Precio
 # …	…
 # Total	Coste
+
+def carrito():
+
+    carrito= {}
+    condicion= True
+    total= 0
+    while condicion:
+        ingreso= input('Ingresa el producto y el precio: ')
+
+        if ':' in ingreso:
+            ingreso= ingreso.split(':')
+            carrito.setdefault(ingreso[0],ingreso[1])
+            total += float(ingreso[1])
+        elif ingreso.lower() == 'exit':
+            break
+        else:
+            print('Valor o sintaxis de carga invalida')
+            continue
+    for item in carrito.items():
+        print(f'{item[0]}     ${item[1]}')
+    print('-'*80)
+    print(f'Total de coste: ${total}')
+    
+    return
+
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 8
 # Escribir un programa que cree un diccionario de traducción español-inglés. El usuario introducirá las palabras en español e inglés separadas por dos puntos, y cada par <palabra>:<traducción> separados por comas. El programa debe crear un diccionario con las palabras y sus traducciones. Después pedirá una frase en español y utilizará el diccionario para traducirla palabra a palabra. Si una palabra no está en el diccionario debe dejarla sin traducir.
 
+def traductor()->str|dict:
+
+    dicc= {}
+    stop= False
+
+    while stop == False:
+        pares= input('Introduce los pares palabra:valor separados por coma: ')
+
+        if pares.lower() == 'exit':
+            break
+        else:
+            pares= pares.split(',')
+
+        for par in pares:
+            par= par.split(':')
+            dicc.setdefault(par[0].strip(),par[1].strip())
+
+
+    frase= input('Ingresa la frase a traducir: ').split(' ')
+    new_frase= False
+    for palabra in frase:
+        if palabra.lower() in dicc.keys():
+            palabra_trad = dicc[palabra.lower()]
+            if new_frase == False:
+                print(palabra_trad.title(), end= ' ')
+                new_frase= True
+            else:
+                print(palabra_trad, end= ' ')
+        else:
+            print(palabra, end= ' ')
+
+    return 
+
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 9
 # Escribir un programa que gestione las facturas pendientes de cobro de una empresa. Las facturas se almacenarán en un diccionario donde la clave de cada factura será el número de factura y el valor el coste de la factura. El programa debe preguntar al usuario si quiere añadir una nueva factura, pagar una existente o terminar. Si desea añadir una nueva factura se preguntará por el número de factura y su coste y se añadirá al diccionario. Si se desea pagar una factura se preguntará por el número de factura y se eliminará del diccionario. Después de cada operación el programa debe mostrar por pantalla la cantidad cobrada hasta el momento y la cantidad pendiente de cobro.
+
+def gestor(promp= 'Ingrese el nombre de usuario: ')->str:
+
+
+    usuario= input(promp)
+    dicc= {}
+    datos= {}
+    print(f'Bienvenido {usuario}\n')
+    total_pagado= 0
+    total_adeudado= 0
+    dicc.setdefault(usuario,datos)
+
+    while True:
+
+        gestion= input('Seleccione la gestion a realizar:\n\n1--Ingreso de factura\n2--Pago de factura\n\n')
+
+
+        if gestion.lower() in ['terminar', 'exit', 'logout']:
+            break
+        elif int(gestion) == 1:
+            ingreso= input('Ingrese el N° de factura seguido de su importe en $(separados por coma): ').split(',')
+            if len(ingreso) != 2:
+                print('Ingreso invalido')
+                while len(ingreso) != 2:
+                    ingreso= input('Ingrese el N° de factura seguido de su importe en $(separados por coma): ').split(',')
+            datos.setdefault(ingreso[0],float(ingreso[1].strip()))
+            total_adeudado += float(ingreso[1])
+        elif int(gestion) == 2:
+            print(f'Facturas registradas:\n{dicc[usuario]}')
+            ingreso= input('Ingrese el N° de factura a pagar: ')
+            print(f'\nMonto a pagar: {dicc[usuario][ingreso]}\n')
+            total_pagado += dicc[usuario][ingreso]
+            total_adeudado -= dicc[usuario][ingreso]
+            dicc[usuario].pop(ingreso)
+        else:
+            print('Valor invalido. Ingrese un valor nuevamente')
+            continue
+
+        print(f'\nTotal pagado: ${total_pagado}\nTotal adeudado: {total_adeudado}\n')
+        
+    return
+
+
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 10
@@ -1191,6 +1363,10 @@ def ():
 # Mostrar lista de todos los clientes de la base datos con su NIF y nombre.
 # Mostrar la lista de clientes preferentes de la base de datos con su NIF y nombre.
 # Terminar el programa.
+
+
+
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 11
 # El directorio de los clientes de una empresa está organizado en una cadena de texto como la de más abajo, donde cada línea contiene la información del nombre, email, teléfono, nif, y el descuento que se le aplica. Las líneas se separan con el carácter de cambio de línea \n y la primera línea contiene los nombres de los campos con la información contenida en el directorio.
