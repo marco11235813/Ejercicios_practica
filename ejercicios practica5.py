@@ -1363,7 +1363,94 @@ def gestor(promp= 'Ingrese el nombre de usuario: ')->str:
 # Mostrar lista de todos los clientes de la base datos con su NIF y nombre.
 # Mostrar la lista de clientes preferentes de la base de datos con su NIF y nombre.
 # Terminar el programa.
+db_clientes= {}
 
+#nombre, direccion, telefono, correo, preferente
+def gestor_db(promp= 'Ingrese el NIF de usuario: ')->str:
+
+    llaves= ['Nombre', 'Direccion', 'Telefono', 'Correo', 'Preferente']
+    print(f'Bienvenido al Sistema de Gestion de Usuarios\n')
+
+    while True:
+
+        datos= {}
+        try:
+            gestion= int(input('Seleccione la gestion a realizar:\n\n1--Añadir cliente\n2--Eliminar cliente\n3--Mostrar Cliente\n4--Listar todos los clientes\n5--Listar Clientes preferentes\n6--Terminar\n\n'))
+        except ValueError:
+            print('Tipo de valor invalido.\nIngrese entre las opciones numericas de la lista.\n')
+            print('-'*100)
+            continue
+
+        if gestion == 6:
+            print('Gracias por utilizar nuestro servicio')
+            break
+        elif gestion == 1:
+            print(f'Gestion N°{gestion}\n')
+            while True:
+                try:
+                    usuario= int(input(promp))
+                    break
+                except ValueError:
+                    print('NIF invalido')
+                    print('-'*100)
+                    continue
+            if usuario in db_clientes:
+                print('El NIF de usuario ya existe')
+                print('-'*100)
+                continue
+            else:
+                pass
+
+            for key in llaves:
+                ingreso= input(f'{key}: ').strip()
+                datos.setdefault(key,ingreso)
+            db_clientes.setdefault(usuario,datos)
+
+        elif gestion == 2:
+            print(f'Gestion N°{gestion}\n')
+            ingreso= input('Ingrese el NIF del Cliente: ')
+            if ingreso in db_clientes.keys():
+                confirmacion= input(f'Esta seguro que desea eliminar los datos de la cuenta {ingreso}? Si/NO: ').lower()
+                if confirmacion in ['si','no']:
+                    if confirmacion == 'si':
+                        db_clientes.pop(ingreso)
+                    else:
+                        continue
+            else:
+                print('N° de NIF inexistente')
+                print('-'*100)
+                continue
+
+        elif gestion == 3:
+            print(f'Gestion N°{gestion}\n')
+            ingreso= int(input('Ingrese el NIF del Cliente: '))
+            if ingreso in db_clientes.keys():
+                print(f'N° de NIF: {ingreso}---- Datos: {db_clientes[ingreso]}')
+                print('-'*100)
+            else:
+                print('N° de NIF inexistente')
+                print('-'*100)
+                continue
+
+        elif gestion == 4:
+            print(f'Gestion N°{gestion}\n')
+            for user in db_clientes.items():
+                print(f'N° de NIF: {user[0]}-----Nombre: {user[1]["Nombre"]}')
+            print('-'*100)
+        elif gestion == 5:
+            print(f'Gestion N°{gestion}\n')
+            for user in db_clientes.items():
+                if user[1]["Preferente"] == str(True):
+                    print(f'N° de NIF: {user[0]}-----Nombre: {user[1]["Nombre"]}')
+                else:
+                    continue
+                print('-'*100)
+        else:
+            print('Valor fuera de rango. Ingrese un valor nuevamente')
+            continue
+
+        
+    return
 
 
 
@@ -1376,6 +1463,27 @@ def gestor(promp= 'Ingrese el nombre de usuario: ')->str:
 # Escribir un programa que genere un diccionario con la información del directorio, donde cada elemento corresponda a un cliente y tenga por clave su nif y por valor otro diccionario con el resto de la información del cliente. Los diccionarios con la información de cada cliente tendrán como claves los nombres de los campos y como valores la información de cada cliente correspondientes a los campos. Es decir, un diccionario como el siguiente
 
 # {'01234567L': {'nombre': 'Luis González', 'email': 'luisgonzalez@mail.com', 'teléfono': '656343576', 'descuento': 12.5}, '71476342J': {'nombre': 'Macarena Ramírez', 'email': 'macarena@mail.com', 'teléfono': '692839321', 'descuento': 8.0}, '63823376M': {'nombre': 'Juan José Martínez', 'email': 'juanjo@mail.com', 'teléfono': '664888233', 'descuento': 5.2}, '98376547F': {'nombre': 'Carmen Sánchez', 'email': 'carmen@mail.com', 'teléfono': '667677855', 'descuento': 15.7}}
+
+
+def formatear_datos()->str|dict:
+
+    datos= input('Ingrese los datos a formatear: ').replace(';', ',')
+    temp= datos.split('\n')
+
+    campos= temp[0].pop(0)
+    temp.pop[0]
+    nif= []
+    datos:
+
+
+    for idx,x in enumerate(temp):
+        nif.append(x[0])
+        for key,value in zip()
+
+
+
+    return
+
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
