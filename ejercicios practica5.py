@@ -1465,22 +1465,27 @@ def gestor_db(promp= 'Ingrese el NIF de usuario: ')->str:
 # {'01234567L': {'nombre': 'Luis González', 'email': 'luisgonzalez@mail.com', 'teléfono': '656343576', 'descuento': 12.5}, '71476342J': {'nombre': 'Macarena Ramírez', 'email': 'macarena@mail.com', 'teléfono': '692839321', 'descuento': 8.0}, '63823376M': {'nombre': 'Juan José Martínez', 'email': 'juanjo@mail.com', 'teléfono': '664888233', 'descuento': 5.2}, '98376547F': {'nombre': 'Carmen Sánchez', 'email': 'carmen@mail.com', 'teléfono': '667677855', 'descuento': 15.7}}
 
 
-def formatear_datos()->str|dict:
+def formatear_datos()->dict:    
 
-    datos= input('Ingrese los datos a formatear: ').replace(';', ',')
-    temp= datos.split('\n')
+    datos= input('Ingrese los datos a formatear: ').replace(';', ',').replace('"', '')
+    temp= datos.split('\\n')
 
-    campos= temp[0].pop(0)
-    temp.pop[0]
-    nif= []
-    datos:
+    campos= temp[0].split(',')
+    campos.pop(0)
+    temp= [x.split(',') for x in temp][1::]
+    nif= [x[0] for x in temp]
+    dicc= {}
 
+    for x in temp:
+        x.pop(0)
 
-    for idx,x in enumerate(temp):
-        nif.append(x[0])
-        for key,value in zip()
+    for index, x in enumerate(temp):
+        valores= {}
+        for idx,y in enumerate(campos):
+            valores.setdefault(y,x[idx])
+        dicc.setdefault(nif[index],valores)
 
-
+    print(dicc)
 
     return
 
@@ -1490,6 +1495,337 @@ def formatear_datos()->str|dict:
 #----------------------------------------------------------------------------------------------------------
 
 
+# Ejercicios de Funciones
+
+
+
+# Ejercicio 1
+# Escribir una función que muestre por pantalla el saludo ¡Hola amiga! cada vez que se la invoque.
+
+def saludo()->str:
+    print('!Hola amiga¡')
+    return
+
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 2
+# Escribir una función a la que se le pase una cadena <nombre> y muestre por pantalla el saludo ¡hola <nombre>!.
+
+def saludo2()->str:
+
+    nombre= input('Ingresa un nombre: ')
+    print(f'!Hola {nombre}¡')
+
+    return
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 3
+# Escribir una función que reciba un número entero positivo y devuelva su factorial.
+
+def factorial(n)->int:
+
+    n= abs(int(n))
+    if n > 1:
+        n= n*factorial(n-1)
+
+    return n
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 4
+# Escribir una función que calcule el total de una factura tras aplicarle el IVA. La función debe recibir la cantidad sin IVA y el porcentaje de IVA a aplicar, y devolver el total de la factura. Si se invoca la función sin pasarle el porcentaje de IVA, deberá aplicar un 21%.
+
+def facturacion_con_IVA(importe:float, iva= 21)->str:
+
+    iva= iva/100
+    importe_iva= importe*iva
+    total= importe+importe_iva
+
+    print(f'Facturacion sin IVA: ${importe}\nImporte de IVA: ${importe_iva}\nFacturacion con IVA: ${total}')
+    return
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 5
+# Escribir una función que calcule el área de un círculo y otra que calcule el volumen de un cilindro usando la primera función.
+import math
+def area_circulo(radio:float)->float:
+    # podriamos utilizar el valor 3,14 para pi pero para un calculo mas exacto, preferi importar el modulo math la variable pi
+
+    area= math.pi * (radio**2)
+
+    return area
+
+def volumen_cilindro(radio,altura)->float:
+
+    volumen= area_circulo(radio)*altura
+
+    return volumen
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 6
+# Escribir una función que reciba una muestra de números en una lista y devuelva su media.
+
+def media(*args)->int|float:
+
+    while True:
+        try:
+            if len(args) == 1 and type(args[0]) == list or type(args[0]) == tuple:
+                media= sum(args[0])/len(args[0])
+                break
+            else:
+                lista= list(args)
+                media= sum(lista)/len(lista)
+                break
+        except TypeError:
+            print('EL tipo de dato no se puede leer o transformar como lista.')
+            return
+
+    return media
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 7
+# Escribir una función que reciba una muestra de números en una lista y devuelva otra lista con sus cuadrados.
+
+def al_cuadrado(*args)->str|list:
+
+    while True:
+        try:
+            if len(args) == 1 and type(args[0]) == list or type(args[0]) == tuple:
+                cuadrado= [x**2 for x in args[0]]
+                break
+            else:
+                lista= list(args)
+                cuadrado= [x**2 for x in lista]
+                break
+        except TypeError:
+            print('EL tipo de dato no se puede leer o transformar como lista.')
+            return
+
+    return cuadrado
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 8
+# Escribir una función que reciba una muestra de números en una lista y devuelva un diccionario con su media, varianza y desviación típica.
+
+
+## en este caso, para simplificar, usaremos el modulo numpy que cuenta con funcionalidades en estadisticos (varianza y desviacion estandar entre muchos otros)
+import numpy as np
+def estadisticos(*args):
+    llaves= ['Media', 'Varianza', 'Desvio estandar']
+
+    while True:
+        try:
+            if len(args) == 1 and type(args[0]) == list or type(args[0]) == tuple:
+                mean= media(args)
+                varianza= np.var(args)
+                desvio= np.std(lista)
+                estadisticos= dict(zip(llaves,[mean,varianza,desvio]))
+                break
+            else:
+                lista= list(args)
+                mean= media(lista)
+                varianza= np.var(lista)
+                desvio= np.std(lista)
+                estadisticos= dict(zip(llaves,[mean,varianza,desvio]))
+                break
+        except TypeError:
+            print('EL tipo de dato no se puede leer o transformar como lista.')
+            return
+
+    return estadisticos
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 9
+# Escribir una función que calcule el máximo común divisor de dos números y otra que calcule el mínimo común múltiplo.
+
+def mcd_y_mcm(numero1,numero2)->str:
+
+    """Funcion que toma 2 numeros y obtiene su Maximo Comun Divisor (mcd)
+        y su Minimo Comun Multiplo (mcm)"""
+
+    if numero1 < 1 or numero2 < 1:
+        print('Valor invalido')
+        return
+    else:
+        valores= [numero1,numero2]      #declaramos las variables que vamos a utilizar
+        divisores_1= []
+        divisores_2= []
+        primos= []
+        coincidencias= []
+        mcd= 1
+        mcm= 1
+
+        for numero in valores:          #obtenemos nuestros numeros primos dentro del rango del maximo numero
+            for x in range(2,numero+1):
+                primo= True
+                for y in range(2,x):
+                    if x == y:
+                        break
+                    elif x%y == 0:
+                        primo= False
+                        break
+                if x in primos:
+                    continue
+                elif primo == True:
+                    primos.append(x)
+
+
+        for idx,numero in enumerate(valores):       # agregamos los factores primos a cada lista correspondiente
+            while numero > 1:
+                for x in primos:
+                    while numero%x == 0:
+                        numero /= x
+                        if idx == 0:
+                            divisores_1.append(x)
+                        else:
+                            divisores_2.append(x)
+
+        
+        factores_primos= list(set(divisores_1)) + list(set(divisores_2))        ## Obtenemos los factores primos comunes entre ambas listas
+
+        for x in divisores_1:
+            for idx,y in enumerate(divisores_2):
+                if x == y:
+                    coincidencias.append(x)
+                    divisores_2.pop(idx)
+                    break
+                else:
+                    continue
+
+        for x in coincidencias:             # Obtenemos el Maximo Comun Divisor
+            mcd *= x
+        for x in factores_primos:           # Obtenemos el Minimo Comun Multiplo
+            mcm *= x
+
+
+    print(f'Maximo Comun Divisor entre {numero1} y {numero2}: {mcd}\nMinimo Comun Multiplo entre {numero1} y {numero2}: {mcm}')
+    return
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 10
+# Escribir una función que convierta un número decimal en binario y otra que convierta un número binario en decimal.
+
+def decimal_a_binario():
+
+    temp= int(input('Ingresa un numero: '))
+    numero= temp
+    restos= []
+    cadena= None
+
+    while numero != 0:
+        restos.append(str(numero%2))
+        numero= numero//2
+
+    for x in restos:
+        if cadena == None:
+            cadena = x
+        else:
+            cadena += x
+
+    binario= int(cadena[::-1])
+
+    return binario
+
+def binario_a_decimal(binario):
+
+    temp= str(binario)
+    numero= [x for x in temp]
+    resultados= []
+
+    for idx,x in enumerate(temp[::-1]):
+        resultados.append(int(x)*(2**idx))
+
+    return sum(resultados)
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 11
+# Escribir un programa que reciba una cadena de caracteres y devuelva un diccionario con cada palabra que contiene y su frecuencia. Escribir otra función que reciba el diccionario generado con la función anterior y devuelva una tupla con la palabra más repetida y su frecuencia.
+
+def contador_palabras():
+
+    cadena= input('Ingrese una frase: ').lower().split()
+    dicc= {}
+    llaves= set(cadena)
+
+    for x in llaves:
+            valor= cadena.count(x)
+            dicc.setdefault(x,valor)
+
+    return dicc
+
+def moda():
+
+    dicc= contador_palabras()
+    maximo= max(dicc.values())
+
+    for llave,valor in dicc.items():
+        if valor == maximo:
+            print(f'La moda de este conjunto de datos es: {(llave,valor)}')
+
+    return
+
+
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+
+# Ejercicios de Programación Funcional
+
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 1
+# Escribir una función que aplique un descuento a un precio y otra que aplique el IVA a un precio. Escribir una tercera función que reciba un diccionario con los precios y porcentajes de una cesta de la compra, y una de las funciones anteriores, y utilice la función pasada para aplicar los descuentos o el IVA a los productos de la cesta y devolver el precio final de la cesta.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 2
+# Escribir una función que simule una calculadora científica que permita calcular el seno, coseno, tangente, exponencial y logaritmo neperiano. La función preguntará al usuario el valor y la función a aplicar, y mostrará por pantalla una tabla con los enteros de 1 al valor introducido y el resultado de aplicar la función a esos enteros.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 3
+# Escribir una función que reciba otra función y una lista, y devuelva otra lista con el resultado de aplicar la función dada a cada uno de los elementos de la lista.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 4
+# Escribir una función que reciba otra función booleana y una lista, y devuelva otra lista con los elementos de la lista que devuelvan True al aplicarles la función booleana.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 5
+# Escribir una función que reciba una frase y devuelva un diccionario con las palabras que contiene y su longitud.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 6
+# Escribir una función reciba una lista de notas y devuelva la lista de calificaciones correspondientes a esas notas.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 7
+# Escribir una función reciba un diccionario con las asignaturas y las notas de un alumno y devuelva otro diccionario con las asignaturas en mayúsculas y las calificaciones correspondientes a las notas.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 8
+# Escribir una función reciba un diccionario con las asignaturas y las notas de un alumno y devuelva otro diccionario con las asignaturas en mayúsculas y las calificaciones correspondientes a las notas aprobadas.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 9
+# Escribir una función que calcule el módulo de un vector.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 10
+# Una inmobiliaria de una ciudad maneja una lista de inmuebles como la siguiente:
+
+# [{'año': 2000, 'metros': 100, 'habitaciones': 3, 'garaje': True, 'zona': 'A'},
+# {'año': 2012, 'metros': 60, 'habitaciones': 2, 'garaje': True, 'zona': 'B'},
+# {'año': 1980, 'metros': 120, 'habitaciones': 4, 'garaje': False, 'zona': 'A'},
+# {'año': 2005, 'metros': 75, 'habitaciones': 3, 'garaje': True, 'zona': 'B'},
+# {'año': 2015, 'metros': 90, 'habitaciones': 2, 'garaje': False, 'zona': 'A'}]
+# Construir una función que permita hacer búsqueda de inmuebles en función de un presupuesto dado. La función recibirá como entrada la lista de inmuebles y un precio, y devolverá otra lista con los inmuebles cuyo precio sea menor o igual que el dado. Los inmuebles de la lista que se devuelva deben incorporar un nuevo par a cada diccionario con el precio del inmueble, donde el precio de un inmueble se calcula con las siguiente fórmula en función de la zona:
+
+# Zona A: precio = (metros * 1000 + habitaciones * 5000 + garaje * 15000) * (1-antiguedad/100)
+# Zona B: precio = (metros * 1000 + habitaciones * 5000 + garaje * 15000) * (1-antiguedad/100) * 1.5
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 11
+# Escribir una función que reciba una muestra de números y devuelva los valores atípicos, es decir, los valores cuya puntuación típica sea mayor que 3 o menor que -3. Nota: La puntuación típica de un valor se obtiene restando la media y dividiendo por la desviación típica de la muestra.
+
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
 def main():
     return
 
