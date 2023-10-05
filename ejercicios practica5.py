@@ -757,7 +757,7 @@ def contraseña()->str|None:
 # Escribir un programa que pida al usuario un número entero y muestre por pantalla si es un número primo o no.
 
 
-def primo_o_no()->str|bool:
+def primo_o_no(numero= None)->str|bool:
 
     numero= int(input('Ingrese un numero entero positivo: '))
     primo= True
@@ -1774,34 +1774,182 @@ def moda():
 # Ejercicio 1
 # Escribir una función que aplique un descuento a un precio y otra que aplique el IVA a un precio. Escribir una tercera función que reciba un diccionario con los precios y porcentajes de una cesta de la compra, y una de las funciones anteriores, y utilice la función pasada para aplicar los descuentos o el IVA a los productos de la cesta y devolver el precio final de la cesta.
 
+def iva(importe, porcentaje):
+
+    iva= porcentaje/100
+
+    return importe + (importe * iva)
+
+def descuento(importe, porcentaje):
+    
+    descuento= porcentaje/100
+
+    return importe - (importe*descuento)
+
+def cesta(funcion, productos):
+    total= 0
+    for precio, porcentaje in productos.items():
+        importe= funcion(precio,porcentaje)
+        total += importe
+
+    print(f'Importe Total a pagar: ${total}')
+
+    return
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 2
 # Escribir una función que simule una calculadora científica que permita calcular el seno, coseno, tangente, exponencial y logaritmo neperiano. La función preguntará al usuario el valor y la función a aplicar, y mostrará por pantalla una tabla con los enteros de 1 al valor introducido y el resultado de aplicar la función a esos enteros.
+
+import math
+def razones_trigonometricas(valor, function)-> float|int:
+
+    if function in ['log', 'logaritmo', 'valorlogaritmo neperiano']:
+        resultado= math.log()
+    elif function in ['sin', 'sen', 'seno']:
+        resultado= math.sin(valor)
+    elif function in ['cos', 'coseno']:
+        resultado= math.cos(valor)
+    elif function in ['tan', 'tangente']:
+        resultado= math.tan(valor)
+
+    return resultado
+
+def calculadora(promp1= 'Ingrese un valor: ',promp2= 'Ingrese la funcion a aplicar: ')->list|tuple:
+
+    valor= int(input(promp1))
+    funcion= input(promp2).lower()
+    resultado= [razones_trigonometricas(x,funcion) for x in range(1,valor+1)]
+
+    return resultado
+
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 3
 # Escribir una función que reciba otra función y una lista, y devuelva otra lista con el resultado de aplicar la función dada a cada uno de los elementos de la lista.
 
+def funcion(x)-> str|int|float:
+    if type(x) == int or type(x) == float or type(x) == str:
+        x= str(x)+'|_|||_|'
+    else:
+        x= '1'
+
+    return x
+
+def aplicar(lista: list|tuple|str,function):
+
+    new= [function(x) for x in lista]
+    print(new)
+    
+    return
+
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 4
 # Escribir una función que reciba otra función booleana y una lista, y devuelva otra lista con los elementos de la lista que devuelvan True al aplicarles la función booleana.
+
+def multiplo_3(x)->int:
+
+    if x%3 == 0:
+        resultado= True
+    else:
+        resultado= False
+
+    return  resultado
+
+def observacion(lista: list|tuple):
+
+    resultado= []
+    for x in lista:
+        resultado.append(multiplo_3(x))
+
+    return resultado
+
+
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 5
 # Escribir una función que reciba una frase y devuelva un diccionario con las palabras que contiene y su longitud.
 
+def contador_palabras()->dict:
+
+    frase= input('Ingresa una frase: ').split()
+    conteo=[]
+
+    for palabra in frase:
+        conteo.append(frase.count(palabra))
+        
+    return  dict(set(zip(frase,conteo)))
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 6
 # Escribir una función reciba una lista de notas y devuelva la lista de calificaciones correspondientes a esas notas.
 
+def calificaciones(nota)-> str:
+
+    calificaciones= ['No Satisfactorio', 'Satisfactorio', 'Bueno','Muy bueno','Excelente']
+    if nota in [1,2,3]:
+        nota= calificaciones[0]
+    elif nota in [4,5]:
+        nota= calificaciones[1]
+    elif nota in [6,7]:
+        nota= calificaciones[2]
+    elif nota in [8,9]:
+        nota= calificaciones[3]
+    elif nota == 10:
+        nota= calificaciones[-1]
+    else:
+        nota= 'valor invalido'       
+
+    return nota
+
+
+def calificar(notas: list)->list:
+
+    notas= [calificaciones(x) for x in notas]
+    
+    return notas
+    
+    
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 7
 # Escribir una función reciba un diccionario con las asignaturas y las notas de un alumno y devuelva otro diccionario con las asignaturas en mayúsculas y las calificaciones correspondientes a las notas.
+
+
+def asignaturas(asignaturas= 'Ingrese las asignaturas separadas por coma: ', lista= 'Ingrese las notas separadas por comas: ')-> dict:
+
+    materias= input(asignaturas).split(',')
+    notas= input(lista).split(',') 
+    notas= [int(x.strip()) for x in notas]
+
+    dicc= {}
+
+    for materia,nota in zip(materias,notas):
+        dicc.setdefault(materia,nota)
+
+    return dicc
+
+def registro_alumno()-> dict:
+
+    mayusculas= []
+    temp= asignaturas()
+    materias, notas = temp.keys(),temp.values()
+
+    for x in materias:
+        mayusculas.append(x.title())
+
+    notas= calificar(notas)
+    dicc= dict(zip(mayusculas,notas))
+
+    return dicc
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 8
 # Escribir una función reciba un diccionario con las asignaturas y las notas de un alumno y devuelva otro diccionario con las asignaturas en mayúsculas y las calificaciones correspondientes a las notas aprobadas.
 
+def aprobadas(registro: dict)->dict:
+
+    
+    return
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 9
 # Escribir una función que calcule el módulo de un vector.
@@ -1826,9 +1974,7 @@ def moda():
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
-def main():
-    return
 
 
 if __name__ == '__main__':
-    main()
+    pass
