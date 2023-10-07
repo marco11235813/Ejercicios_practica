@@ -1946,13 +1946,27 @@ def registro_alumno()-> dict:
 # Ejercicio 8
 # Escribir una función reciba un diccionario con las asignaturas y las notas de un alumno y devuelva otro diccionario con las asignaturas en mayúsculas y las calificaciones correspondientes a las notas aprobadas.
 
-def aprobadas(registro: dict)->dict:
+def aprobadas()->dict:
 
-    
-    return
+    registro= asignaturas()
+    dicc= {}
+    for materia,nota in zip(registro.keys(),registro.values()):
+        if nota >= 6:
+            dicc.setdefault(materia.upper(),nota)
+        else:
+            continue
+
+    return dicc
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 9
 # Escribir una función que calcule el módulo de un vector.
+
+def vector():
+
+    return 
+
+def modulo():
+    return
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 10
@@ -1967,14 +1981,121 @@ def aprobadas(registro: dict)->dict:
 
 # Zona A: precio = (metros * 1000 + habitaciones * 5000 + garaje * 15000) * (1-antiguedad/100)
 # Zona B: precio = (metros * 1000 + habitaciones * 5000 + garaje * 15000) * (1-antiguedad/100) * 1.5
+
+def catalogo(inmuebles: dict|list)->list:
+    return inmuebles
+
+import random
+
+def tasacion(presupuesto: int|float, lista= '')->list:
+    
+    
+    if lista == '':
+        lista= catalogo([{'año': 2000, 'metros': 100, 'habitaciones': 3, 'garaje': True, 'zona': 'A'},
+                        {'año': 2012, 'metros': 60, 'habitaciones': 2, 'garaje': True, 'zona': 'B'},
+                        {'año': 1980, 'metros': 120, 'habitaciones': 4, 'garaje': False, 'zona': 'A'},
+                        {'año': 2005, 'metros': 75, 'habitaciones': 3, 'garaje': True, 'zona': 'B'},
+                        {'año': 2015, 'metros': 90, 'habitaciones': 2, 'garaje': False, 'zona': 'A'}])
+    else:
+        pass
+
+    monto= 0
+    aprobados= []
+
+    for inmueble in lista:
+        antiguedad= random.randint(0,10)
+        if inmueble['zona'] == 'A':
+            precio = (inmueble['metros'] * 1000 + inmueble['habitaciones'] * 5000 + inmueble['garaje'] * 15000) * (1-antiguedad/100)
+            # print(precio)
+        else:
+            precio = (inmueble['metros'] * 1000 + inmueble['habitaciones'] * 5000 + inmueble['garaje'] * 15000) * (1-antiguedad/100) * 1.5
+            # print(precio)
+        if precio <= presupuesto:
+            inmueble.setdefault('Precio', precio)
+            aprobados.append(inmueble)
+        else:
+            continue
+
+    return aprobados
+
+
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 11
 # Escribir una función que reciba una muestra de números y devuelva los valores atípicos, es decir, los valores cuya puntuación típica sea mayor que 3 o menor que -3. Nota: La puntuación típica de un valor se obtiene restando la media y dividiendo por la desviación típica de la muestra.
 
+def muestra(numeros= random.choices(range(-100,40), k= 15))->list|tuple:
+    return numeros
+
+import numpy as np
+
+def valores_atipicos():
+    
+    temp= muestra()
+
+    valores_atipicos= [((x-np.mean(temp))/np.std(temp)) for x in temp]
+
+    # for x in valores_atipicos:
+    #     if x >=3 or x <= -3:
+    #         print(x)
+    #     else:
+    #         continue
+    
+    return valores_atipicos
+
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
 
+# Ejercicios de Ficheros
+
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 1
+# Escribir una función que pida un número entero entre 1 y 10 y guarde en un fichero con el nombre tabla-n.txt la tabla de multiplicar de ese número, done n es el número introducido.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 2
+# Escribir una función que pida un número entero entre 1 y 10, lea el fichero tabla-n.txt con la tabla de multiplicar de ese número, done n es el número introducido, y la muestre por pantalla. Si el fichero no existe debe mostrar un mensaje por pantalla informando de ello.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 3
+# Escribir una función que pida dos números n y m entre 1 y 10, lea el fichero tabla-n.txt con la tabla de multiplicar de ese número, y muestre por pantalla la línea m del fichero. Si el fichero no existe debe mostrar un mensaje por pantalla informando de ello.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 4
+# Escribir un programa que acceda a un fichero de internet mediante su url y muestre por pantalla el número de palabras que contiene.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 5
+# Escribir un programa que abra el fichero con información sobre el PIB per cápita de los países de la Unión Europea (url:https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/sdg_08_10.tsv.gz&unzip=true), pregunte por las iniciales de un país y muestre el PIB per cápita de ese país de todos los años disponibles.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 6
+# Escribir un programa para gestionar un listín telefónico con los nombres y los teléfonos de los clientes de una empresa. El programa incorporar funciones crear el fichero con el listín si no existe, para consultar el teléfono de un cliente, añadir el teléfono de un nuevo cliente y eliminar el teléfono de un cliente. El listín debe estar guardado en el fichero de texto listin.txt donde el nombre del cliente y su teléfono deben aparecer separados por comas y cada cliente en una línea distinta.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 7
+# El fichero cotizacion.csv contiene las cotizaciones de las empresas del IBEX35 con las siguientes columnas: Nombre (nombre de la empresa), Final (precio de la acción al cierre de bolsa), Máximo (precio máximo de la acción durante la jornada), Mínimo (precio mínimo de la acción durante la jornada), Volumen (Volumen al cierre de bolsa), Efectivo (capitalización al cierre en miles de euros).
+
+# Construir una función reciba el fichero de cotizaciones y devuelva un diccionario con los datos del fichero por columnas.
+
+# Construir una función que reciba el diccionario devuelto por la función anterior y cree un fichero en formato csv con el mínimo, el máximo y la media de dada columna.
+
+#----------------------------------------------------------------------------------------------------------
+# Ejercicio 8
+# El fichero calificaciones.csv contiene las calificaciones de un curso. Durante el curso se realizaron dos exámenes parciales de teoría y un examen de prácticas. Los alumnos que tuvieron menos de 4 en alguno de estos exámenes pudieron repetirlo en la al final del curso (convocatoria ordinaria). Escribir un programa que contenga las siguientes funciones:
+
+# Una función que reciba el fichero de calificaciones y devuelva una lista de diccionarios, donde cada diccionario contiene la información de los exámenes y la asistencia de un alumno. La lista tiene que estar ordenada por apellidos.
+
+# Una función que reciba una lista de diccionarios como la que devuelve la función anterior y añada a cada diccionario un nuevo par con la nota final del curso. El peso de cada parcial de teoría en la nota final es de un 30% mientras que el peso del examen de prácticas es de un 40%.
+
+# Una función que reciba una lista de diccionarios como la que devuelve la función anterior y devuelva dos listas, una con los alumnos aprobados y otra con los alumnos suspensos. Para aprobar el curso, la asistencia tiene que ser mayor o igual que el 75%, la nota de los exámenes parciales y de prácticas mayor o igual que 4 y la nota final mayor o igual que 5.
+
+
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     pass
