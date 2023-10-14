@@ -2052,27 +2052,160 @@ def valores_atipicos():
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 1
-# Escribir una función que pida un número entero entre 1 y 10 y guarde en un fichero con el nombre tabla-n.txt la tabla de multiplicar de ese número, done n es el número introducido.
+# Escribir una función que pida un número entero entre 1 y 10 y guarde en un fichero con el nombre tabla-n.txt la tabla de multiplicar de ese número, donde es el número introducido.
 
+def tablatxt(num)->None:
+
+    try:
+        with open('tabla-n.txt', 'w') as fich:
+            fich.write(f'Tabla del {num}\n')
+            for numero in range(1,11):
+                fich.write(f'{num} x {numero} = {num*numero}\n')
+    except ValueError as error:
+        print(error)
+
+    return 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 2
 # Escribir una función que pida un número entero entre 1 y 10, lea el fichero tabla-n.txt con la tabla de multiplicar de ese número, done n es el número introducido, y la muestre por pantalla. Si el fichero no existe debe mostrar un mensaje por pantalla informando de ello.
+
+def entero(num)->str:
+
+    tabla= tablatxt(num)
+    try:
+        with open('tabla-n.txt', 'r') as t:
+            for linea in t:
+                print(linea)
+    except FileNotFoundError as e:
+        print('El fichero no existe')
+    
+
+    return
+
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 3
 # Escribir una función que pida dos números n y m entre 1 y 10, lea el fichero tabla-n.txt con la tabla de multiplicar de ese número, y muestre por pantalla la línea m del fichero. Si el fichero no existe debe mostrar un mensaje por pantalla informando de ello.
 
+
+def dos_enteros(n,m)->str:
+
+    tabla= tablatxt(n)
+    try: 
+        with open('tabla-n.txt', 'r') as fichero:
+            for idx,linea in enumerate(fichero):
+                if m == idx:
+                    print(linea)
+                else:
+                    continue
+    except FileNotFoundError as e:
+        print('El fichero no existe')
+    
+
+    return
+
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 4
 # Escribir un programa que acceda a un fichero de internet mediante su url y muestre por pantalla el número de palabras que contiene.
 
-#----------------------------------------------------------------------------------------------------------
-# Ejercicio 5
-# Escribir un programa que abra el fichero con información sobre el PIB per cápita de los países de la Unión Europea (url:https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/sdg_08_10.tsv.gz&unzip=true), pregunte por las iniciales de un país y muestre el PIB per cápita de ese país de todos los años disponibles.
+def scraping(promp= 'Ingrese una URL: ')->str|int:
+    import requests
+    url= input(promp)
+
+    archivo= requests.get(url)
+    temp= archivo.text.split('\n')
+    temp= [x.split() for x in temp]
+    print(temp)
+    contador= len(temp)
+
+    return contador
+
+
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 6
 # Escribir un programa para gestionar un listín telefónico con los nombres y los teléfonos de los clientes de una empresa. El programa incorporar funciones crear el fichero con el listín si no existe, para consultar el teléfono de un cliente, añadir el teléfono de un nuevo cliente y eliminar el teléfono de un cliente. El listín debe estar guardado en el fichero de texto listin.txt donde el nombre del cliente y su teléfono deben aparecer separados por comas y cada cliente en una línea distinta.
+
+def crear_listin():
+
+    with open('l.txt', 'w') as f:
+        while True:
+            nombre= input('Ingrese el nombre del cliente: ')
+            telefono= input('Ingrese el telefono del cliente: ')
+            f.write(f'{nombre}:{telefono}\n')
+            salir= input('Desea agregar mas clientes? SI/NO-----> ').lower()
+
+            if salir not in ['si', 'no']:
+                print('valor invalido')
+            elif salir == 'no':
+                break
+            else:
+                continue
+
+    return
+
+def consulta_cliente()->str|tuple:
+
+    promp= input('Ingresa el nombre del cliente: ').title()
+    with open('l.txt', 'r') as f:
+        dicc= {}
+        temp= f.read().split('\n')
+        temp.pop(-1)
+        temp= [x.split(':') for x in temp]
+        for key,value in temp:
+            dicc.setdefault(key, value)
+    if promp in dicc.keys():
+        print(f'Cliente: {promp}\nTeléfono: {dicc[promp]}')
+    else:
+        print('El cliente no existe')
+
+    return
+
+def añadir_telefono():
+
+    with open('l.txt', 'a') as f:
+        print()
+
+    return
+def eliminar_telefono():
+    return
+
+def listin_telefonico()->str|list|tuple:
+
+    print('Gestor de Listado Telefónico\n')
+    print('Ingrese la accion a realizar:\1-crear el fichero\n2-Consultar el teléfono de un cliente\n3-Añadir el teléfono de un nuevo cliente\n4-Eliminar el teléfono de un cliente\n5-terminar')
+    
+    while True: 
+        promp= input('---> ')
+
+        try:
+            int(promp)
+        except ValueError:
+            print('Valor incorrecto')
+            continue
+
+        if int(promp) not in [1,2,3,4,5]:
+            print('Ingrese una accion valida')
+            continue
+        else:
+            promp= int(promp)
+
+            if promp == 1:
+                try:
+                    f= open('listin.txt', 'r')
+                except FileNotFoundError:
+                    crear_listin()
+            elif promp == 2:
+                consulta_cliente()
+            elif promp == 3:
+
+            elif promp == 4:
+            else:
+                break
+
+
+    return
+
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 7
