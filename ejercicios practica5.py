@@ -2164,16 +2164,39 @@ def consulta_cliente()->str|tuple:
 def añadir_telefono():
 
     with open('l.txt', 'a') as f:
-        print()
+        nombre= input('Ingresa el nombre del cliente: ').title()
+        telefono= input('Ingrese el telefono del cliente: ')
+        f.write(f'{nombre}:{telefono}\n')
 
     return
+
 def eliminar_telefono():
+
+    with open('l.txt', 'r') as f:
+        dicc= {}
+        temp= f.read().split('\n')
+        temp.pop(-1)
+        temp= [x.split(':') for x in temp]
+        for key,value in temp:
+            dicc.setdefault(key, value)
+    eliminar= input('Ingrese el nombre del cliente a eliminar: ').title()
+    if eliminar in dicc.keys():
+        with open('l.txt', 'w') as f:
+            for key,value in temp:
+                if key == eliminar:
+                    continue
+                else:
+                    f.write(f'{key}:{value}\n')
+    else:
+        print('El cliente no existe')
+    
+
     return
 
 def listin_telefonico()->str|list|tuple:
 
     print('Gestor de Listado Telefónico\n')
-    print('Ingrese la accion a realizar:\1-crear el fichero\n2-Consultar el teléfono de un cliente\n3-Añadir el teléfono de un nuevo cliente\n4-Eliminar el teléfono de un cliente\n5-terminar')
+    print('Ingrese la accion a realizar:\n1-Crear el fichero\n2-Consultar el teléfono de un cliente\n3-Añadir el teléfono de un nuevo cliente\n4-Eliminar el teléfono de un cliente\n5-Terminar\n')
     
     while True: 
         promp= input('---> ')
@@ -2195,14 +2218,18 @@ def listin_telefonico()->str|list|tuple:
                     f= open('listin.txt', 'r')
                 except FileNotFoundError:
                     crear_listin()
+                print('-'*80)
             elif promp == 2:
                 consulta_cliente()
+                print('-'*80)
             elif promp == 3:
-
+                añadir_telefono()
+                print('-'*80)
             elif promp == 4:
+                eliminar_telefono()
+                print('-'*80)
             else:
                 break
-
 
     return
 
@@ -2214,6 +2241,74 @@ def listin_telefonico()->str|list|tuple:
 # Construir una función reciba el fichero de cotizaciones y devuelva un diccionario con los datos del fichero por columnas.
 
 # Construir una función que reciba el diccionario devuelto por la función anterior y cree un fichero en formato csv con el mínimo, el máximo y la media de dada columna.
+def datos_txt():
+
+    with open('datos.txt', 'w' ) as f:
+        #Datos a cargar
+        """"""
+        ['Nombre', ' Final', ' Maximo', ' Minimo', ' Volumen', ' Efectivo']
+        ['Cordiez', '15.35', '16.40', '14.98', '780', '47814']
+        ['Mercado libre', '34.23', ' 34.45', '33.09', '4596', '209089']""""""
+
+        carga= None
+        while True:
+            carga= input('Ingrese los datos(exit para terminar): ').strip()
+            if carga == None:
+                pass
+            elif carga == 'exit':
+                break
+            else:
+                carga= (carga).split(',')
+                f.write(f'{str(carga)}\n')
+               
+    return
+
+def a_dicc():
+
+    with open('datos.txt', 'r') as f:
+        lista_keys= f.readline().strip("[]' \n" ).split(',')
+        lista_keys= [x.strip("' ") for x in lista_keys]
+        dicc= {}
+        for key in lista_keys:
+            dicc.setdefault(key.strip(),[])
+
+        for linea in f:
+            linea= linea.strip('\n').split(',')
+            dicc['Nombre'].append(str(linea[0].strip(" []'")))
+            dicc['Final'].append(float(linea[1].strip(" '")))
+            dicc['Maximo'].append(float(linea[2].strip(" '")))
+            dicc['Minimo'].append(float(linea[3].strip(" '")))
+            dicc['Volumen'].append(int(linea[4].strip(" '")))
+            dicc['Efectivo'].append(int(linea[5].strip(" []'")))
+
+    return dicc
+
+def a_csv():
+    import csv
+
+    diccionario = a_dicc()
+
+    media = [(x + y) / 2 for x, y in zip(diccionario['Maximo'], diccionario['Minimo'])]
+    diccionario['Media'] = media
+    col_del= ['Final','Volumen','Efectivo']# creamos una lista de las columnas/claves a eliminar
+    for valor in col_del:# iteramos sobre esos valores
+        if valor in diccionario:#si la clave esta en el diccionario
+            del diccionario[valor]#borramos la clave(por ende tambien sus valores)
+    with open('datos_ej.csv', 'w', newline='') as f:
+
+        writer = csv.DictWriter(f, fieldnames=diccionario.keys())
+        writer.writeheader()
+
+        # Obtener el número de filas
+        num_rows = len(diccionario['Nombre'])
+
+        for i in range(num_rows):
+            
+            row = {key: diccionario[key][i] for key in diccionario.keys()}
+            writer.writerow(row)
+    return
+
+
 
 #----------------------------------------------------------------------------------------------------------
 # Ejercicio 8
