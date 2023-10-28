@@ -2245,10 +2245,10 @@ def datos_txt():
 
     with open('datos.txt', 'w' ) as f:
         #Datos a cargar
-        """"""
-        ['Nombre', ' Final', ' Maximo', ' Minimo', ' Volumen', ' Efectivo']
-        ['Cordiez', '15.35', '16.40', '14.98', '780', '47814']
-        ['Mercado libre', '34.23', ' 34.45', '33.09', '4596', '209089']""""""
+        # """
+        # ['Nombre', ' Final', ' Maximo', ' Minimo', ' Volumen', ' Efectivo']
+        # ['Cordiez', '15.35', '16.40', '14.98', '780', '47814']
+        # ['Mercado libre', '34.23', ' 34.45', '33.09', '4596', '209089']"""
 
         carga= None
         while True:
@@ -2320,6 +2320,124 @@ def a_csv():
 
 # Una función que reciba una lista de diccionarios como la que devuelve la función anterior y devuelva dos listas, una con los alumnos aprobados y otra con los alumnos suspensos. Para aprobar el curso, la asistencia tiene que ser mayor o igual que el 75%, la nota de los exámenes parciales y de prácticas mayor o igual que 4 y la nota final mayor o igual que 5.
 
+def crear_csv()->None|str:
+
+    # Nombre,Apellido,Asistencia,Teoria1,Teoria2,Practicas
+    # Marco,Cabrera,75,8,7,3
+    # Luna,Hernandez,60,7,10,8
+    # Mauro,Silas,90,8,7,9
+    # Francisco,Santana,35,4,4,8
+
+
+    """Esta funcion creo un archivo .csv con los datos que 
+    ingrese el usuario.
+    En caso de que el archivo ya exista, se da salida al aviso que ya existe y se termina la ejecucion"""
+
+    import csv
+    import os
+    nombre_csv= input('Nombre del csv a crear (recuerda poner la extension.csv al final del nombre): ')
+    try:
+        f= open(nombre_csv, 'r')
+        if os.path.exists(nombre_csv):
+            print('El archivo ya existe')
+            return
+    except FileNotFoundError as error:
+        print("Se creara un nuevo archivo .csv\n")
+        
+    with open(nombre_csv, 'w', newline='') as f:
+        print('Ingresa los datos separados por ",": ')
+        campos= input('Primero ingresa los nombres de los campos: ').split(',')
+        writer= csv.DictWriter(f,fieldnames= campos)
+        writer.writeheader()
+        print('Ahora ingresa los valores de cada campo: ')
+        for i in range(len(campos)):
+            valores= input().split(',')
+            if valores[0] == 'exit':
+                break
+            else:
+                row= {campo: valor for campo,valor in zip(campos,valores)}
+                writer.writerow(row)
+    return 'Archivo creado con exito'
+
+
+def agregar_datos_csv()->None|str:
+
+    """Esta funcion añade datos a un archivo .csv existente, para lo cual 
+    le pedira al usuario que ingrese el nombre del archivo (debe ser un archivo con
+    formato csv)
+    En caso de que el archivo no exista, se da aviso al usuario por pantalla y se detiene la ejecucion"""
+
+    import csv
+    import os
+    archivo= input('Ingrese el nombre de un archivo con su extension .csv: ')
+    if os.path.exists(archivo) == False:
+        return 'El archivo no existe'
+    with open(archivo, 'a', newline= '') as f:
+            writer= csv.writer(f)
+            llaves= f.readline().strip().split(',')
+            while True:
+                datos= input('Ingresa los nuevos datos separados por ",": ').strip().split(',')
+                if datos[0] == 'exit':
+                    break
+                else:
+                    writer.writerow(datos)
+    return 'Se han agregado los datos con exito'
+    
+
+def dicc_calificaciones(fichero= 'C:/Users/usuario/Desktop/cursado ITmaster/tramo2/calificaciones.csv')->dict|list:
+
+    """Esta funcion obtiene como argumento el path de un
+    archivo(de preferencia csv) y devuelve una lista de diccionarios"""
+
+    import csv
+    import os
+    lista= list() ## inicializamos una variable con una lista vacia a la cual le vamos a ir agregando valores
+    path= fichero ## guardamos en una variable el path del archivo pasado como argumento
+    if os.path.exists(fichero) == False: ## corroboramos que exista el path del archivo que pasamos como argumento
+        return 'El archivo no existe'
+    with open(path, 'r') as f:
+            llaves= f.readline().strip().split(',') ## formateamos y guardamos en una variable, los nombres de los campos que se encuentran en la primera linea
+            apellidos= sorted([line.split(',')[1] for line in f]) ##creamos una lista ordenada alfabeticamente de los apellidos para corroborar los valores existentes
+            with open(path, 'r') as f:
+                    f.readline()
+                    for line in f:
+                        line= line.strip().split(',') ## formateamos cada fila leida
+                        row= {llave:valor for llave,valor in zip(llaves,line)} ##construimos un diccionario en base a los campos y sus valores correspondientes(los pares clave-valor)
+                        lista.append(row)## agregamos cada diccionario a la lista
+    lista= sorted(lista, key= lambda x: x.get('Apellido'))
+    return lista
+
+
+
+def nota_final()->list|dict:
+
+    """Esta funcion crea un nuevo par clave:valor correspondiente a 
+    la nota final para cada alumno, y lo agrega al diccionario(registro) correspondiente """
+
+    dicc= dicc_calificaciones()
+    for x in dicc:
+        pesos= (int(x['Teoria1'])*0.3) + (int(x['Teoria2'])*0.3) + (int(x['Practicas'])*0.4)
+        x['Nota_Final']= pesos
+    return dicc
+
+
+def aprobado_desaprobado()->list|dict:
+
+    """Esta funcion clasifica a los alumnos como aprobados o desaprobados"""
+
+    aprobados= list()
+    desaprobados= list()
+    alumnos= nota_final()
+    for alumno in alumnos:
+        aplazos= sum([int(x) >= 4 for x in [alumno['Teoria1'], alumno['Teoria2'], alumno['Practicas']]]) == 3
+        n_final= float(alumno['Nota_Final']) >= 5
+        asistencia= int(alumno['Asistencia']) >= 75
+        if (aplazos+n_final+asistencia) == 3:
+            aprobados.append(alumno['Nombre'])
+        else:
+            desaprobados.append(alumno['Nombre'])
+    print(f'Aprobados:\n{aprobados}\n\n', f'Desaprobados:\n{desaprobados}')
+    return
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
@@ -2327,3 +2445,4 @@ def a_csv():
 
 if __name__ == '__main__':
     pass
+
